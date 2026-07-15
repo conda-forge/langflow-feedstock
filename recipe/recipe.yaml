@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: "1.10.3"
+  version: "1.11.0"
   python_min: "3.11"
   sdk_version: "0.2.3"
 
@@ -11,7 +11,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: f2da6699844a8f84dabd82a7bdf33410f1026f81543ca6750a9d0482b86933bd
+  sha256: 6237d2b506b30d869073438a063a961d8a6dfe6c4e7ae373832343ff9705f3ed
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. These patches strip
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -23,7 +23,7 @@ source:
     - patches/0002-lean-umbrella-deps.patch
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   - package:

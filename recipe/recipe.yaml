@@ -3,7 +3,7 @@ schema_version: 1
 context:
   version: "1.10.3"
   python_min: "3.11"
-  sdk_version: "0.2.2"
+  sdk_version: "0.2.3"
 
 recipe:
   name: langflow-suite
@@ -23,7 +23,7 @@ source:
     - patches/0002-lean-umbrella-deps.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:

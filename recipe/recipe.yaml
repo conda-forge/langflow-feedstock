@@ -189,9 +189,11 @@ outputs:
         - langchain-community >=0.4.1,<1.0.0
         - ibm-watsonx-ai >=1.3.1,<2.0.0
         - langchain-ibm >=1.1.0,<1.2.0
-        # ibm-db (Db2 Vector Store client) is not packaged on conda-forge, so
-        # it is intentionally omitted here; the Db2VS component is
-        # unavailable unless users pip install ibm-db separately.
+        # PyPI's ibm-db (Db2 Vector Store client) is packaged as ibm_db on
+        # conda-forge. conda-forge doesn't build it for linux-aarch64 (same
+        # gap as the upstream wheel), so lfx-ibm may fail to solve there
+        # until that changes.
+        - ibm_db >=3.2.9,<4.0.0
     tests:
       - python:
           imports:

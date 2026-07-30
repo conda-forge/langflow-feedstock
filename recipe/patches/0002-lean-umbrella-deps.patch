@@ -1,15 +1,22 @@
 --- a/pyproject.toml
 +++ b/pyproject.toml
-@@ -17,12 +17,8 @@ maintainers = [
+@@ -17,7 +17,7 @@ maintainers = [
  ]
  # Define your main dependencies here
  dependencies = [
--    "langflow-base[complete]>=0.10.2",
-+    "langflow-base>=0.10.2",
+-    "langflow-base[complete]>=0.11.1",
++    "langflow-base>=0.11.1",
      # langflow-extensions:bundle-deps-start
--    "lfx-duckduckgo>=0.1.0",
--    "lfx-arxiv>=0.1.0",
--    "lfx-ibm>=0.1.0",
--    "lfx-docling>=0.1.0",
-     # langflow-extensions:bundle-deps-end
- ]
+     # Release coordination: langflow declares BOUNDED ranges (>=A,<B) for every
+     # curated lfx-* package, never exact pins -- exact pins in reusable library
+@@ -27,10 +27,6 @@ dependencies = [
+     # <1.0.0); lfx-bundles versions with the metapackage contract (bound <2.0).
+     # The cross-bundle CI matrix verifies these ranges resolve together across
+     # the supported lfx axis.
+-    "lfx-duckduckgo>=0.1.0,<1.0.0",
+-    "lfx-arxiv>=0.1.0,<1.0.0",
+-    "lfx-ibm>=0.1.0,<1.0.0",
+-    "lfx-docling>=0.1.0,<1.0.0",
+     # all-no-torch == all minus the torch-pulling providers (cuga, codeagents),
+     # so the default install is torch-free. Users who want those two components
+     # opt in with: pip install "lfx-bundles[all]" (or the per-provider extra).

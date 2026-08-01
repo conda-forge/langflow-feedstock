@@ -76,8 +76,10 @@ outputs:
         - openpyxl >=3.1.5,<4.0.0
         - fastapi >=0.135.0,<1.0.0
         - uvicorn >=0.34.3,<1.0.0
-        - gunicorn >=22.0
-        - a2wsgi >=1.10.0
+        - if: not win
+          then:
+            - gunicorn >=22.0
+            - a2wsgi >=1.10.0
         - typer >=0.16.0,<1.0.0
         - platformdirs >=4.3.8,<5.0.0
         - aiofiles >=24.1.0,<25.0.0

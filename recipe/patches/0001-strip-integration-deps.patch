@@ -23,16 +23,7 @@
      "nest-asyncio>=1.6.0,<2.0.0",
      "emoji>=2.12.0,<3.0.0",
      "cryptography>=48.0.1",
-@@ -64,7 +58,7 @@ dependencies = [
-     "uncurl>=0.0.11,<1.0.0",
-     "sentry-sdk[fastapi,loguru]>=2.5.1,<3.0.0",
-     "chardet>=7.3.0",
--    "firecrawl-py>=1.0.16,<2.0.0",
-+    "firecrawl>=1.0.16,<2.0.0",
-     "opentelemetry-api>=1.30.0,<2.0.0",
-     "opentelemetry-sdk>=1.30.0,<2.0.0",
-     "opentelemetry-exporter-prometheus>=0.50b0,<1.0.0",
-@@ -79,8 +73,6 @@ dependencies = [
+@@ -78,8 +72,6 @@ dependencies = [
      "nanoid>=2.0.0,<3.0.0",
      "filelock>=3.20.1,<4.0.0",
      "grandalf>=0.8.0,<1.0.0",
@@ -41,7 +32,7 @@
      "assemblyai>=0.33.0,<1.0.0",
      "fastapi-pagination>=0.13.1,<1.0.0",
      "defusedxml>=0.7.1,<1.0.0",
-@@ -93,21 +85,12 @@ dependencies = [
+@@ -94,13 +86,7 @@ dependencies = [
      "greenlet>=3.1.1,<4.0.0",
      "jsonquerylang>=1.1.1,<2.0.0",
      "sqlalchemy[aiosqlite]>=2.0.38,<3.0.0",
@@ -54,12 +45,4 @@
 -    "langchain-chroma~=0.2.6",
      "jaraco-context>=6.1.0",
      "wheel>=0.46.2,<1.0.0",
--    "onnxruntime>=1.20,<1.24; python_version<'3.14'", # >=1.24 does not support Python 3.10; allow 1.23.x for agent-lifecycle-toolkit compatibility
--    "onnxruntime>=1.26; python_version>='3.14'",
-     "dynaconf>=3.2.13,<4.0.0",
-     "pyasn1>=0.6.3,<0.7.0",
-     "langgraph-checkpoint>4.0.0,<5.0.0",
--    "transformers>=5.6.0,<6.0.0",
- ]
-
- [dependency-groups]
+     "onnxruntime>=1.20,<1.24; python_version<'3.14'", # >=1.24 does not support Python 3.10; allow 1.23.x for agent-lifecycle-toolkit compatibility

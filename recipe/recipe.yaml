@@ -4,7 +4,7 @@ context:
   version: "1.11.1"
   python_min: "3.11"
   sdk_version: "0.3.1"
-  bundle_version: "0.1.1"
+  bundle_version: "0.1.2"
 
 recipe:
   name: langflow-suite

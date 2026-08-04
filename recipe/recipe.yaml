@@ -1,9 +1,9 @@
 schema_version: 1
 
 context:
-  version: "1.10.2"
+  version: "1.11.1"
   python_min: "3.11"
-  sdk_version: "0.2.2"
+  sdk_version: "0.3.1"
   bundle_version: "0.1.1"
 
 recipe:
@@ -12,7 +12,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 8a2c3c485944df2680779ab4abc4c3e03b8bf7d0b019256c5b2470bf321a2350
+  sha256: e07d8d7813db676bbab1489db1ebcecbc2bd49fce549c31b7f09007d88f92c83
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. These patches strip
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -74,8 +74,13 @@ outputs:
         - pandas >=2.0.0,<3.0.0
         - pydantic >=2.0.0,<3.0.0
         - pillow >=11.1.0,<13.0.0
+        - openpyxl >=3.1.5,<4.0.0
         - fastapi >=0.135.0,<1.0.0
         - uvicorn >=0.34.3,<1.0.0
+        - if: not win
+          then:
+            - gunicorn >=22.0
+            - a2wsgi >=1.10.0
         - typer >=0.16.0,<1.0.0
         - platformdirs >=4.3.8,<5.0.0
         - aiofiles >=24.1.0,<25.0.0
@@ -94,6 +99,7 @@ outputs:
         - defusedxml >=0.7.1,<1.0.0
         - passlib >=1.7.4,<2.0.0
         - pydantic-settings >=2.10.1,<3.0.0
+        - toml >=0.10.2,<1.0.0
         - tomli >=2.2.1,<3.0.0
         - pyyaml >=6.0.0,<7.0.0
         - orjson >=3.11.6,<4.0.0
@@ -106,12 +112,15 @@ outputs:
         - filelock >=3.20.1,<4.0.0
         - pypdf >=6.10.0,<7.0.0
         - cryptography >=48.0.1
+        - pyjwt >=2.10.0,<3.0.0
         - ag-ui-protocol >=0.1.10
         - ${{ pin_subpackage('langflow-sdk', exact=True) }}
         - markitdown >=0.1.4,<2.0.0
-        - setuptools >=80.0.0,<81.0.0
+        - setuptools >=83.0.0,<84.0.0
         - wheel >=0.46.2,<1.0.0
         - mcp >=1.17.0,<2.0.0
+        - psutil >=5.9.0,<8.0.0
+        - beautifulsoup4 >=4.12.3,<5.0.0
       run_constraints:
         - magika >=0.6.1,!=0.6.3,<0.7.0
     tests:
@@ -233,8 +242,12 @@ outputs:
     build:
       noarch: python
       script:
+        # accessibility-checker (a frontend devDependency) pulls in puppeteer, whose
+        # postinstall tries to download a Chrome binary. That download fails in the
+        # build sandbox, and the binary is unused by `npm run build` anyway.
         - if: win
           then: |
+            set PUPPETEER_SKIP_DOWNLOAD=true
             call npm --prefix src/frontend ci
             if errorlevel 1 exit 1
             call npm --prefix src/frontend run build
@@ -243,6 +256,7 @@ outputs:
             if errorlevel 1 exit 1
           else: |
             set -ex
+            export PUPPETEER_SKIP_DOWNLOAD=true
             npm --prefix src/frontend ci
             npm --prefix src/frontend run build
             npx --yes license-checker --production --start src/frontend --customPath "$RECIPE_DIR/license-checker-format.json" --json --out src/frontend/third-party-licenses.json
@@ -325,7 +339,7 @@ outputs:
         - prometheus_client >=0.20.0,<1.0.0
         - aiofiles >=24.1.0,<25.0.0
         - pip >=26.0.0,<27.0.0
-        - setuptools >=80.0.0,<81.0.0
+        - setuptools >=83.0.0,<84.0.0
         - nanoid >=2.0.0,<3.0.0
         - filelock >=3.20.1,<4.0.0
         - grandalf >=0.8.0,<1.0.0
@@ -336,7 +350,9 @@ outputs:
         - validators >=0.34.0,<1.0.0
         - networkx >=3.4.2,<4.0.0
         - json-repair >=0.30.3,<1.0.0
-        - mcp >=1.17.0,<2.0.0
+        - mcp >=1.28.0,<2.0.0
+        - a2a-sdk >=1.1.0,<2.0.0
+        - ag-ui-protocol ==0.1.18
         - aiosqlite >=0.20.0,<1.0.0
         - greenlet >=3.1.1,<4.0.0
         - jsonquerylang >=1.1.1,<2.0.0
@@ -344,23 +360,21 @@ outputs:
         - scipy >=1.15.2,<2.0.0
         - jaraco.context >=6.1.0
         - wheel >=0.46.2,<1.0.0
+        - onnxruntime >=1.20,<1.24
         - dynaconf >=3.2.13,<4.0.0
         - pyasn1 >=0.6.3,<0.7.0
         - langgraph-checkpoint >4.0.0,<5.0.0
         - transformers >=5.6.0,<6.0.0
       run_constraints:
-        # jq (Python bindings) has no conda-forge equivalent: conda-forge's
-        # "jq" package is only the CLI tool and doesn't register pip
-        # metadata under the name "jq", so it can never satisfy this
-        # requirement. Stripped from the wheel's own metadata via the patch
-        # instead of listed as a run dep.
-        # onnxruntime's upstream bound is python-version-conditional
-        # (<1.24 for <3.14, >=1.26 for >=3.14), which a single noarch build
-        # can't represent, and pinning <1.24 here would conflict with the
-        # newer onnxruntime magika (pulled in transitively via markitdown)
-        # already needs. Kept soft/optional and stripped from the wheel's
-        # own metadata via the patch.
-        - onnxruntime >=1.20
+        - gunicorn >=25.3.0,<27.0.0
+        - langchain-mongodb >=0.11.0
+        - langchain-perplexity >=1.0.0,<2.0.0
+        - langchain-qdrant >=1.0.0,<2.0.0
+        - langchain-chroma >=0.2.6,<0.3.0
+        - elevenlabs >=1.52.0,<2.0.0
+        - clickhouse-connect ==0.7.19
+        - duckdb >=1.0.0,<2.0.0
+        - jq >=1.7.0,<2.0.0
     tests:
       - python:
           imports:

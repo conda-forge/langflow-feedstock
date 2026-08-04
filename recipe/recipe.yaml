@@ -4,6 +4,7 @@ context:
   version: "1.11.1"
   python_min: "3.11"
   sdk_version: "0.3.1"
+  bundle_version: "0.1.2"
 
 recipe:
   name: langflow-suite
@@ -23,7 +24,7 @@ source:
     - patches/0002-lean-umbrella-deps.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -131,6 +132,111 @@ outputs:
             - ${{ python_min }}.*
 
   - package:
+      name: lfx-duckduckgo
+      version: ${{ bundle_version }}
+    build:
+      noarch: python
+      script:
+        - ${{ PYTHON }} -m pip install src/bundles/duckduckgo -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python ${{ python_min }}.*
+        - pip
+        - hatchling
+      run:
+        - python >=${{ python_min }},<3.15
+        - ${{ pin_subpackage('lfx', exact=True) }}
+        - langchain-community >=0.4.1,<1.0.0
+        - ddgs >=9.0.0
+    tests:
+      - python:
+          imports:
+            - lfx_duckduckgo
+          pip_check: true
+          python_version:
+            - ${{ python_min }}.*
+
+  - package:
+      name: lfx-arxiv
+      version: ${{ bundle_version }}
+    build:
+      noarch: python
+      script:
+        - ${{ PYTHON }} -m pip install src/bundles/arxiv -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python ${{ python_min }}.*
+        - pip
+        - hatchling
+      run:
+        - python >=${{ python_min }},<3.15
+        - ${{ pin_subpackage('lfx', exact=True) }}
+        - defusedxml >=0.7.1,<1.0.0
+    tests:
+      - python:
+          imports:
+            - lfx_arxiv
+          pip_check: true
+          python_version:
+            - ${{ python_min }}.*
+
+  - package:
+      name: lfx-ibm
+      version: ${{ bundle_version }}
+    build:
+      noarch: python
+      script:
+        - ${{ PYTHON }} -m pip install src/bundles/ibm -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python ${{ python_min }}.*
+        - pip
+        - hatchling
+      run:
+        - python >=${{ python_min }},<3.15
+        - ${{ pin_subpackage('lfx', exact=True) }}
+        - langchain-community >=0.4.1,<1.0.0
+        - ibm-watsonx-ai >=1.3.1,<2.0.0
+        - langchain-ibm >=1.1.0,<1.2.0
+        # PyPI's ibm-db (Db2 Vector Store client) is packaged as ibm_db on
+        # conda-forge. conda-forge doesn't build it for linux-aarch64 (same
+        # gap as the upstream wheel), so lfx-ibm may fail to solve there
+        # until that changes.
+        - ibm_db >=3.2.9,<4.0.0
+    tests:
+      - python:
+          imports:
+            - lfx_ibm
+          pip_check: true
+          python_version:
+            - ${{ python_min }}.*
+
+  - package:
+      name: lfx-docling
+      version: ${{ bundle_version }}
+    build:
+      noarch: python
+      script:
+        - ${{ PYTHON }} -m pip install src/bundles/docling -vv --no-deps --no-build-isolation
+    requirements:
+      host:
+        - python ${{ python_min }}.*
+        - pip
+        - hatchling
+      run:
+        - python >=${{ python_min }},<3.15
+        - ${{ pin_subpackage('lfx', exact=True) }}
+        - httpx >=0.28.1,<1.0.0
+        - docling-core >=2.36.1,<3.0.0
+    tests:
+      - python:
+          imports:
+            - lfx_docling
+          pip_check: true
+          python_version:
+            - ${{ python_min }}.*
+
+  - package:
       name: langflow-base
       version: ${{ version }}
     build:
@@ -180,6 +286,11 @@ outputs:
         - langchain-weaviate >=0.0.6
         - langchain-core >=1.3.3,<2.0.0
         - langchainhub >=0.1.15,<0.2.0
+        - langchain-mongodb >=0.11.0
+        - langchain-perplexity >=1.0.0,<2.0.0
+        - langchain-qdrant >=1.0.0,<2.0.0
+        - langchain-chroma >=0.2.6,<0.3.0
+        - langchain-ibm >=1.1.0,<1.2.0
         - loguru >=0.7.1,<1.0.0
         - structlog >=25.4.0,<26.0.0
         - rich >=13.7.0,<14.0.0
@@ -201,6 +312,7 @@ outputs:
         - pyjwt >=2.12.1
         - pandas >=2.2.3
         - multiprocess >=0.70.14,<1.0.0
+        - duckdb >=1.0.0,<2.0.0
         - python-docx >=1.1.0,<2.0.0
         - nest-asyncio >=1.6.0,<2.0.0
         - emoji >=2.12.0,<3.0.0
@@ -211,6 +323,12 @@ outputs:
         - sentry-sdk >=2.5.1,<3.0.0
         - chardet >=7.3.0
         - firecrawl >=1.0.16,<2.0.0
+        - gunicorn >=25.3.0,<27.0.0
+        - elevenlabs >=1.52.0,<2.0.0
+        - clickhouse-connect ==0.7.19
+        - spider-client >=0.0.27,<1.0.0
+        - ibm-watsonx-ai >=1.3.1,<2.0.0
+        - trustcall >=0.0.38,<1.0.0
         - opentelemetry-api >=1.30.0,<2.0.0
         - opentelemetry-sdk >=1.30.0,<2.0.0
         - opentelemetry-exporter-prometheus >=0.50b0,<1.0.0

@@ -61,6 +61,10 @@ Current release info
 | [![Conda Recipe](https://img.shields.io/badge/recipe-langflow--base-green.svg)](https://anaconda.org/conda-forge/langflow-base) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/langflow-base.svg)](https://anaconda.org/conda-forge/langflow-base) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/langflow-base.svg)](https://anaconda.org/conda-forge/langflow-base) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/langflow-base.svg)](https://anaconda.org/conda-forge/langflow-base) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-langflow--sdk-green.svg)](https://anaconda.org/conda-forge/langflow-sdk) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/langflow-sdk.svg)](https://anaconda.org/conda-forge/langflow-sdk) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/langflow-sdk.svg)](https://anaconda.org/conda-forge/langflow-sdk) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/langflow-sdk.svg)](https://anaconda.org/conda-forge/langflow-sdk) |
 | [![Conda Recipe](https://img.shields.io/badge/recipe-lfx-green.svg)](https://anaconda.org/conda-forge/lfx) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lfx.svg)](https://anaconda.org/conda-forge/lfx) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lfx.svg)](https://anaconda.org/conda-forge/lfx) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lfx.svg)](https://anaconda.org/conda-forge/lfx) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-lfx--arxiv-green.svg)](https://anaconda.org/conda-forge/lfx-arxiv) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lfx-arxiv.svg)](https://anaconda.org/conda-forge/lfx-arxiv) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lfx-arxiv.svg)](https://anaconda.org/conda-forge/lfx-arxiv) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lfx-arxiv.svg)](https://anaconda.org/conda-forge/lfx-arxiv) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-lfx--docling-green.svg)](https://anaconda.org/conda-forge/lfx-docling) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lfx-docling.svg)](https://anaconda.org/conda-forge/lfx-docling) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lfx-docling.svg)](https://anaconda.org/conda-forge/lfx-docling) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lfx-docling.svg)](https://anaconda.org/conda-forge/lfx-docling) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-lfx--duckduckgo-green.svg)](https://anaconda.org/conda-forge/lfx-duckduckgo) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lfx-duckduckgo.svg)](https://anaconda.org/conda-forge/lfx-duckduckgo) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lfx-duckduckgo.svg)](https://anaconda.org/conda-forge/lfx-duckduckgo) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lfx-duckduckgo.svg)](https://anaconda.org/conda-forge/lfx-duckduckgo) |
+| [![Conda Recipe](https://img.shields.io/badge/recipe-lfx--ibm-green.svg)](https://anaconda.org/conda-forge/lfx-ibm) | [![Conda Downloads](https://img.shields.io/conda/dn/conda-forge/lfx-ibm.svg)](https://anaconda.org/conda-forge/lfx-ibm) | [![Conda Version](https://img.shields.io/conda/vn/conda-forge/lfx-ibm.svg)](https://anaconda.org/conda-forge/lfx-ibm) | [![Conda Platforms](https://img.shields.io/conda/pn/conda-forge/lfx-ibm.svg)](https://anaconda.org/conda-forge/lfx-ibm) |
 
 Installing langflow
 ===================
@@ -72,31 +76,73 @@ conda config --add channels conda-forge
 conda config --set channel_priority strict
 ```
 
-Once the `conda-forge` channel has been enabled, `langflow, langflow-base, langflow-sdk, lfx` can be installed with `conda`:
+How to use
+----------
+
+<details>
+<summary>With conda</summary>
 
 ```
-conda install langflow langflow-base langflow-sdk lfx
+conda install langflow langflow-base langflow-sdk lfx lfx-arxiv lfx-docling lfx-duckduckgo lfx-ibm
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
-mamba install langflow langflow-base langflow-sdk lfx
+mamba install langflow langflow-base langflow-sdk lfx lfx-arxiv lfx-docling lfx-duckduckgo lfx-ibm
 ```
 
-It is possible to list all of the versions of `langflow` available on your platform with `conda`:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+# for adding to your local project
+pixi add langflow langflow-base langflow-sdk lfx lfx-arxiv lfx-docling lfx-duckduckgo lfx-ibm
+# for installing globally
+pixi global install langflow langflow-base langflow-sdk lfx lfx-arxiv lfx-docling lfx-duckduckgo lfx-ibm
+```
+
+</details>
+
+Search package versions
+-----------------------
+
+It is possible to list all of the versions of `langflow` available on your platform:
+
+<details>
+<summary>With conda</summary>
 
 ```
 conda search langflow --channel conda-forge
 ```
 
-or with `mamba`:
+</details>
+
+<details>
+<summary>With mamba</summary>
 
 ```
 mamba search langflow --channel conda-forge
 ```
 
-Alternatively, `mamba repoquery` may provide more information:
+</details>
+
+<details>
+<summary>With pixi</summary>
+
+```
+pixi search langflow --channel conda-forge
+```
+
+</details>
+
+<details>
+<summary>With mamba repoquery, which may provide more information</summary>
 
 ```
 # Search all versions available on your platform:
@@ -108,6 +154,8 @@ mamba repoquery whoneeds langflow --channel conda-forge
 # List dependencies of `langflow`:
 mamba repoquery depends langflow --channel conda-forge
 ```
+
+</details>
 
 
 About conda-forge

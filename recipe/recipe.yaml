@@ -27,6 +27,7 @@ source:
   patches:
     - patches/0001-strip-integration-deps.patch
     - patches/0002-lean-umbrella-deps.patch
+    - patches/0003-strip-ibm-db-dep.patch
 
 build:
   number: 1
@@ -208,9 +209,11 @@ outputs:
         # linux-aarch64, and this is a noarch package built once -- a
         # platform selector here wouldn't reflect the installer's actual
         # platform. Kept as a constraint rather than a hard dep so
-        # linux-aarch64 users can still install lfx-ibm for the watsonx.ai
-        # LLM/embeddings components; Db2VectorStore needs ibm_db installed
-        # separately on platforms that support it.
+        # linux-aarch64 users can still install lfx-ibm; Db2VectorStore
+        # needs ibm_db installed separately on platforms that support it.
+        # patches/0003-strip-ibm-db-dep.patch drops ibm-db from the
+        # bundle's own pyproject.toml so pip_check doesn't flag it as an
+        # unmet hard requirement.
         - ibm_db >=3.2.9,<4.0.0
     tests:
       - python:

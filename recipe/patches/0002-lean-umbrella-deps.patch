@@ -4,12 +4,12 @@
  ]
  # Define your main dependencies here
  dependencies = [
--    "langflow-base[complete]>=0.11.1",
-+    "langflow-base>=0.11.1",
+-    "langflow-base[complete]>=0.11.3",
++    "langflow-base>=0.11.3",
      # langflow-extensions:bundle-deps-start
      # Release coordination: langflow declares BOUNDED ranges (>=A,<B) for every
      # curated lfx-* package, never exact pins -- exact pins in reusable library
-@@ -27,28 +27,6 @@ dependencies = [
+@@ -27,27 +27,5 @@ dependencies = [
      # <1.0.0); lfx-bundles versions with the metapackage contract (bound <2.0).
      # The cross-bundle CI matrix verifies these ranges resolve together across
      # the supported lfx axis.

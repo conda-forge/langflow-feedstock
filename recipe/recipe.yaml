@@ -1,7 +1,7 @@
 schema_version: 1
 
 context:
-  version: "1.11.2"
+  version: "1.11.3"
   python_min: "3.11"
   sdk_version: "0.3.2"
 
@@ -11,7 +11,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 209dbda345880cc4effb37a37a057fd7d309b583c32c7a08e587347d3561d08f
+  sha256: 0ca9b584c1d011f6e2d9588a465e1facbc18cebd29e7c5b6ff7c791ec8030b93
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. These patches strip
   # out everything that isn't needed to import and run langflow. Nobody uses all of

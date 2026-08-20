@@ -422,7 +422,7 @@ outputs:
           # bcrypt >=4.1 -- this proves it empirically rather than trusting the
           # historical "(trapped) error reading bcrypt version" warning is
           # cosmetic by reputation.
-          - python -c "from passlib.context import CryptContext; ctx = CryptContext(schemes=['bcrypt'], deprecated='auto'); h = ctx.hash('bcrypt-pin-loosen-roundtrip'); assert ctx.verify('bcrypt-pin-loosen-roundtrip', h), 'bcrypt verify failed'; import bcrypt as _b; print('bcrypt version:', getattr(_b, '__version__', 'unknown')); print('bcrypt hash/verify OK')"
+          - python -c "from passlib.context import CryptContext; ctx = CryptContext(schemes=['bcrypt'], deprecated='auto'); h = ctx.hash('bcrypt-pin-loosen-roundtrip'); assert ctx.verify('bcrypt-pin-loosen-roundtrip', h), 'bcrypt verify failed'; import bcrypt as _b; _ver = getattr(_b, '__version__', '0.0'); _tup = tuple(int(x) for x in _ver.split('.')[:2]); assert _tup >= (4, 1), f'expected resolved bcrypt >=4.1 to prove the loosened pin actually took effect, got {_ver}'; print('bcrypt version:', _ver); print('bcrypt hash/verify OK')"
         requirements:
           run:
             - python ${{ python_min }}.*

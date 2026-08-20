@@ -28,9 +28,14 @@ source:
     - patches/0001-strip-integration-deps.patch
     - patches/0002-lean-umbrella-deps.patch
     - patches/0003-strip-ibm-db-dep.patch
+    # Loosens src/backend/base/pyproject.toml's exact bcrypt==4.0.1 pin to
+    # >=4.0.1,<5 to match the loosened langflow-base run: dep below (G26:
+    # pip_check reads the WHEEL's dist-info METADATA, which still bakes in
+    # upstream's exact pin unless the source pyproject is patched too).
+    - patches/0004-loosen-bcrypt-pin.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -325,7 +330,17 @@ outputs:
         - orjson >=3.11.6,<4.0.0
         - alembic >=1.13.0,<2.0.0
         - passlib >=1.7.4,<2.0.0
-        - bcrypt ==4.0.1
+        # Loosened from an exact ==4.0.1 pin (upstream PR #1266): 4.0.1 was the
+        # last bcrypt version before 4.1.0 removed the bcrypt.__about__
+        # submodule, which passlib 1.7.4's internal (legacy-bcrypt) version
+        # probe reads and logs a caught "(trapped) error reading bcrypt
+        # version" warning about (langflow issue #1173, closed) -- the probe
+        # is cosmetic, not load-bearing for hash/verify (see the new bcrypt
+        # hash/verify script test below, which re-verifies this empirically).
+        # ==4.0.1 has no py3.14 (cp314) conda-forge build, so it was the sole
+        # named blocker to a python-3.14 solve of langflow+dbgpt+django.
+        # <5 avoids adopting bcrypt's next major line in the same change.
+        - bcrypt >=4.0.1,<5
         - pillow >=12.1.1,<13.0.0
         - docstring_parser >=0.16,<1.0.0
         - pyjwt >=2.12.1
@@ -398,6 +413,19 @@ outputs:
           site_packages:
             - langflow/frontend/index.html
             - langflow/frontend/assets/*.js
+      - script:
+          # Runtime-verifies the loosened bcrypt pin (>=4.0.1,<5): round-trips
+          # a real hash/verify through passlib's CryptContext, the exact code
+          # path lfx's AuthService.get_password_hash/.verify_password use for
+          # user login / superuser passwords (src/lfx/services/settings/auth.py).
+          # An import-only check would not prove hashing still functions under
+          # bcrypt >=4.1 -- this proves it empirically rather than trusting the
+          # historical "(trapped) error reading bcrypt version" warning is
+          # cosmetic by reputation.
+          - python -c "from passlib.context import CryptContext; ctx = CryptContext(schemes=['bcrypt'], deprecated='auto'); h = ctx.hash('bcrypt-pin-loosen-roundtrip'); assert ctx.verify('bcrypt-pin-loosen-roundtrip', h), 'bcrypt verify failed'; import bcrypt as _b; print('bcrypt version:', getattr(_b, '__version__', 'unknown')); print('bcrypt hash/verify OK')"
+        requirements:
+          run:
+            - python ${{ python_min }}.*
     about:
       license_file:
         - LICENSE

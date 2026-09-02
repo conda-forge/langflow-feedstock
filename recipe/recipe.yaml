@@ -28,9 +28,14 @@ source:
     - patches/0001-strip-integration-deps.patch
     - patches/0002-lean-umbrella-deps.patch
     - patches/0003-strip-ibm-db-dep.patch
+    # Loosens src/backend/base/pyproject.toml's marker-split onnxruntime deps to
+    # >=1.20 to match the loosened langflow-base run: dep below (G26: pip_check
+    # reads the WHEEL's dist-info METADATA, which still bakes in upstream's
+    # per-interpreter marker split unless the source pyproject is patched too).
+    - patches/0005-loosen-onnxruntime-pin.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -372,7 +377,11 @@ outputs:
         - scipy >=1.15.2,<2.0.0
         - jaraco.context >=6.1.0
         - wheel >=0.46.2,<1.0.0
-        - onnxruntime >=1.20,<1.24
+        # Loosened from >=1.20,<1.24 (upstream splits by python_version: <3.14
+        # vs >=3.14, but noarch: python collapses to the low branch and silently
+        # drops cp314 — conda-forge's first cp314 build is 1.25.1, above the
+        # old <1.24 ceiling). Same G26 pattern as steward DW-FU-10-4.
+        - onnxruntime >=1.20  # TODO: tighten once upstream drops the py<3.14 cap
         - dynaconf >=3.2.13,<4.0.0
         - pyasn1 >=0.6.3,<0.7.0
         - langgraph-checkpoint >4.0.0,<5.0.0
@@ -394,10 +403,29 @@ outputs:
           pip_check: true
           python_version:
             - ${{ python_min }}.*
+      - python:
+          imports:
+            - langflow
+          pip_check: true
+          python_version:
+            - 3.14.*
       - package_contents:
           site_packages:
             - langflow/frontend/index.html
             - langflow/frontend/assets/*.js
+      - script:
+          # Runtime-verifies the loosened onnxruntime pin (>=1.20): on py3.14 the
+          # solver must pick >=1.25.1 (the first cp314 build on conda-forge); also
+          # proves markitdown → magika → onnxruntime import chain works — the
+          # dependency path langflow uses for document conversion. Uses `import
+          # langflow` (not langflow.main — stripped integration deps omit chromadb
+          # et al. that main.py pulls at import time).
+          - python -c "import sys; import langflow; import markitdown; import onnxruntime as ort; from magika import Magika; ver = ort.__version__; parts = [int(x) for x in ver.split('.')[:3]]; parts += [0] * (3 - len(parts)); assert not (sys.version_info >= (3, 14) and tuple(parts) < (1, 25, 1)), f'py3.14 needs onnxruntime >=1.25.1, got {ver}'; r = Magika().identify_bytes(b'hello py314 onnxruntime'); assert r.output.label; print('onnxruntime version:', ver); print('langflow + markitdown/magika/onnxruntime OK:', r.output.label)"
+        requirements:
+          run:
+            - python 3.14.*
+            - markitdown >=0.1.4
+            - magika >=0.6.1,!=0.6.3,<0.7.0
     about:
       license_file:
         - LICENSE

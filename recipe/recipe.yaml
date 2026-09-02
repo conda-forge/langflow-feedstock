@@ -424,7 +424,7 @@ outputs:
           run:
             - python ${{ python_min }}.*
       - script:
-          - python -c "import sys; import langflow; import onnxruntime as ort; from magika import Magika; ver = ort.__version__; parts = [int(x) for x in ver.split('.')[:3]]; parts += [0] * (3 - len(parts)); assert not (sys.version_info >= (3, 14) and tuple(parts) < (1, 25, 1)), f'py3.14 needs onnxruntime >=1.25.1, got {ver}'; r = Magika().identify_bytes(b'hello py314 onnxruntime'); assert r.output.label; print('onnxruntime version:', ver); print('langflow + magika/onnxruntime OK:', r.output.label)"
+          - python -c "import sys; import langflow; import markitdown; import onnxruntime as ort; from magika import Magika; ver = ort.__version__; parts = [int(x) for x in ver.split('.')[:3]]; parts += [0] * (3 - len(parts)); assert not (sys.version_info >= (3, 14) and tuple(parts) < (1, 25, 1)), f'py3.14 needs onnxruntime >=1.25.1, got {ver}'; r = Magika().identify_bytes(b'hello py314 onnxruntime'); assert r.output.label; print('onnxruntime version:', ver); print('langflow + markitdown/magika/onnxruntime OK:', r.output.label)"
         requirements:
           run:
             - python 3.14.*

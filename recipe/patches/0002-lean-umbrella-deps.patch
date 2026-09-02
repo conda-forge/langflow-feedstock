@@ -4,8 +4,8 @@
  ]
  # Define your main dependencies here
  dependencies = [
--    "langflow-base[complete]>=0.11.3",
-+    "langflow-base>=0.11.3",
+-    "langflow-base[complete]>=0.11.4",
++    "langflow-base>=0.11.4",
      # langflow-extensions:bundle-deps-start
      # Release coordination: langflow declares BOUNDED ranges (>=A,<B) for every
      # curated lfx-* package, never exact pins -- exact pins in reusable library

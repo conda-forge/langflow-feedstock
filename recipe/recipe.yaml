@@ -28,9 +28,19 @@ source:
     - patches/0001-strip-integration-deps.patch
     - patches/0002-lean-umbrella-deps.patch
     - patches/0003-strip-ibm-db-dep.patch
+    # Loosens src/backend/base/pyproject.toml's exact bcrypt==4.0.1 pin to
+    # >=4.0.1,<5 to match the loosened langflow-base run: dep below (G26:
+    # pip_check reads the WHEEL's dist-info METADATA, which still bakes in
+    # upstream's exact pin unless the source pyproject is patched too).
+    - patches/0004-loosen-bcrypt-pin.patch
+    # Loosens src/backend/base/pyproject.toml's marker-split onnxruntime deps to
+    # >=1.20 to match the loosened langflow-base run: dep below (G26: pip_check
+    # reads the WHEEL's dist-info METADATA, which still bakes in upstream's
+    # per-interpreter marker split unless the source pyproject is patched too).
+    - patches/0005-loosen-onnxruntime-pin.patch
 
 build:
-  number: 0
+  number: 1
 
 outputs:
   - package:
@@ -325,7 +335,9 @@ outputs:
         - orjson >=3.11.6,<4.0.0
         - alembic >=1.13.0,<2.0.0
         - passlib >=1.7.4,<2.0.0
-        - bcrypt ==4.0.1
+        # Loosened from an exact ==4.0.1 pin (upstream PR #1266): ==4.0.1 has no
+        # py3.14 (cp314) conda-forge build. <5 avoids adopting bcrypt's next major.
+        - bcrypt >=4.0.1,<5
         - pillow >=12.1.1,<13.0.0
         - docstring_parser >=0.16,<1.0.0
         - pyjwt >=2.12.1
@@ -372,7 +384,9 @@ outputs:
         - scipy >=1.15.2,<2.0.0
         - jaraco.context >=6.1.0
         - wheel >=0.46.2,<1.0.0
-        - onnxruntime >=1.20,<1.24
+        # Loosened from >=1.20,<1.24 — noarch: python collapses upstream's
+        # marker split and silently drops cp314 (first cp314 build is 1.25.1).
+        - onnxruntime >=1.20  # TODO: tighten once upstream drops the py<3.14 cap
         - dynaconf >=3.2.13,<4.0.0
         - pyasn1 >=0.6.3,<0.7.0
         - langgraph-checkpoint >4.0.0,<5.0.0
@@ -394,10 +408,28 @@ outputs:
           pip_check: true
           python_version:
             - ${{ python_min }}.*
+      - python:
+          imports:
+            - langflow
+          pip_check: true
+          python_version:
+            - 3.14.*
       - package_contents:
           site_packages:
             - langflow/frontend/index.html
             - langflow/frontend/assets/*.js
+      - script:
+          - python -c "from passlib.context import CryptContext; ctx = CryptContext(schemes=['bcrypt'], deprecated='auto'); h = ctx.hash('bcrypt-pin-loosen-roundtrip'); assert ctx.verify('bcrypt-pin-loosen-roundtrip', h), 'bcrypt verify failed'; import bcrypt as _b; _ver = getattr(_b, '__version__', '0.0'); _tup = tuple(int(x) for x in _ver.split('.')[:2]); assert _tup >= (4, 1), f'expected resolved bcrypt >=4.1 to prove the loosened pin actually took effect, got {_ver}'; print('bcrypt version:', _ver); print('bcrypt hash/verify OK')"
+        requirements:
+          run:
+            - python 3.14.*
+      - script:
+          - python -c "import sys; import langflow; import markitdown; import onnxruntime as ort; from magika import Magika; ver = ort.__version__; parts = [int(x) for x in ver.split('.')[:3]]; parts += [0] * (3 - len(parts)); assert not (sys.version_info >= (3, 14) and tuple(parts) < (1, 25, 1)), f'py3.14 needs onnxruntime >=1.25.1, got {ver}'; r = Magika().identify_bytes(b'hello py314 onnxruntime'); assert r.output.label; print('onnxruntime version:', ver); print('langflow + markitdown/magika/onnxruntime OK:', r.output.label)"
+        requirements:
+          run:
+            - python 3.14.*
+            - markitdown >=0.1.4
+            - magika >=0.6.1,!=0.6.3,<0.7.0
     about:
       license_file:
         - LICENSE

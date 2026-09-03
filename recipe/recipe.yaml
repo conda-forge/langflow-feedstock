@@ -1,8 +1,8 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 schema_version: 1
 
 context:
-  version: "1.11.4"
-  python_min: "3.11"
+  version: "1.11.5"
   sdk_version: "0.3.3"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: e33b205553cb27800c26fcf6826e80fdb88b764c3f007f28e2d3ab989b1a1cf0
+  sha256: 1e26ac80823d16cda7a464a29ff98cf757d0778ad45c007d5a219fa8f1a803bb
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. These patches strip
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -40,7 +40,7 @@ source:
     - patches/0005-loosen-onnxruntime-pin.patch
 
 build:
-  number: 1
+  number: 0
 
 outputs:
   - package:

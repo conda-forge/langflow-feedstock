@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "1.11.4"
+  version: "1.11.5"
   sdk_version: "0.3.3"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.

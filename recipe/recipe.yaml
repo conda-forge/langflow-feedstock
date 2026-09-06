@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "1.11.4"
+  version: "1.12.0"
   sdk_version: "0.3.3"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: e33b205553cb27800c26fcf6826e80fdb88b764c3f007f28e2d3ab989b1a1cf0
+  sha256: 86cd3383900b740db5083252359f140a9135cac3d29acf2be040a7d93729beb9
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. These patches strip
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -40,7 +40,7 @@ source:
     - patches/0005-loosen-onnxruntime-pin.patch
 
 build:
-  number: 2
+  number: 0
 
 outputs:
   - package:
@@ -419,12 +419,14 @@ outputs:
             - langflow/frontend/index.html
             - langflow/frontend/assets/*.js
       - script:
-          - python -c "from passlib.context import CryptContext; ctx = CryptContext(schemes=['bcrypt'], deprecated='auto'); h = ctx.hash('bcrypt-pin-loosen-roundtrip'); assert ctx.verify('bcrypt-pin-loosen-roundtrip', h), 'bcrypt verify failed'; import bcrypt as _b; _ver = getattr(_b, '__version__', '0.0'); _tup = tuple(int(x) for x in _ver.split('.')[:2]); assert _tup >= (4, 1), f'expected resolved bcrypt >=4.1 to prove the loosened pin actually took effect, got {_ver}'; print('bcrypt version:', _ver); print('bcrypt hash/verify OK')"
+          - python -c "from passlib.context import CryptContext; ctx = CryptContext(schemes=['bcrypt'], deprecated='auto'); h = ctx.hash('bcrypt-pin-loosen-roundtrip'); assert ctx.verify('bcrypt-pin-loosen-roundtrip', h), 'bcrypt verify failed'; import bcrypt as _b; _ver = getattr(_b, '__version__', '0.0'); _tup = 
+            tuple(int(x) for x in _ver.split('.')[:2]); assert _tup >= (4, 1), f'expected resolved bcrypt >=4.1 to prove the loosened pin actually took effect, got {_ver}'; print('bcrypt version:', _ver); print('bcrypt hash/verify OK')"
         requirements:
           run:
             - python 3.14.*
       - script:
-          - python -c "import sys; import langflow; import markitdown; import onnxruntime as ort; from magika import Magika; ver = ort.__version__; parts = [int(x) for x in ver.split('.')[:3]]; parts += [0] * (3 - len(parts)); assert not (sys.version_info >= (3, 14) and tuple(parts) < (1, 25, 1)), f'py3.14 needs onnxruntime >=1.25.1, got {ver}'; r = Magika().identify_bytes(b'hello py314 onnxruntime'); assert r.output.label; print('onnxruntime version:', ver); print('langflow + markitdown/magika/onnxruntime OK:', r.output.label)"
+          - python -c "import sys; import langflow; import markitdown; import onnxruntime as ort; from magika import Magika; ver = ort.__version__; parts = [int(x) for x in ver.split('.')[:3]]; parts += [0] * (3 - len(parts)); assert not (sys.version_info >= (3, 14) and tuple(parts) < (1, 25, 1)), f'py3.14 needs 
+            onnxruntime >=1.25.1, got {ver}'; r = Magika().identify_bytes(b'hello py314 onnxruntime'); assert r.output.label; print('onnxruntime version:', ver); print('langflow + markitdown/magika/onnxruntime OK:', r.output.label)"
         requirements:
           run:
             - python 3.14.*

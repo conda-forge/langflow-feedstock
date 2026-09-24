@@ -1,21 +1,26 @@
 """Trim and loosen upstream pyproject.toml dependencies at build time.
 
-This replaces the unified-diff patches that used to live in recipe/patches/.
-Those were keyed on the lines *around* each dependency, so they broke on
-almost every upstream release even when the dependencies they touched were
-unchanged. This script matches dependency entries by (normalized) package name
-instead, so upstream reordering, re-pinning or adding neighbouring entries no
-longer matters. An entry that upstream has already dropped is reported and
-skipped rather than failing the build.
+Why this script exists:
 
-rattler-build gives every output a fresh copy of the source, so each output
-whose wheel metadata needs trimming runs this script for itself, from the
-source root, before `pip install`:
-
-    ${{ PYTHON }} "${{ RECIPE_DIR }}/patch_deps.py" <output-name>
-
-The edited metadata must agree with the output's `run:` requirements in
-recipe.yaml, since `pip_check` reads the installed dist-info METADATA.
+- The patch files it replaces (formerly recipe/patches/*.patch) only removed
+  or replaced dependency entries in upstream's pyproject.toml files. None of
+  them made changes codebase's logic.
+- Those patches were hardcoded diffs, keyed on the lines around each entry,
+  so they had to be regenerated for almost every upstream release, even when
+  the dependencies they touched were unchanged. That made every version bump
+  a manual bottleneck.
+- Editing the dependencies with a Python script instead follows
+  db-gpt-feedstock, which does the same in its recipe
+  (https://github.com/conda-forge/db-gpt-feedstock/blob/76343d181fe3f6e7517d90fdc7e9048b5c099ecc/recipe/recipe.yaml#L33),
+  added in response to review feedback on its staged-recipes submission
+  (https://github.com/conda-forge/staged-recipes/pull/33883#discussion_r3519794625).
+- Removing or replacing a dependency involves no project-specific logic, so
+  it can be done automatically, with no manual patch updates. Entries are
+  matched by (normalized) package name, so upstream reordering, re-pinning or
+  adding neighbouring entries doesn't matter. An entry that upstream has
+  already dropped is reported and skipped rather than failing the build.
+- The following implementation is written by Opus 5.5 - https://www.anthropic.com/claude-opus-5-5
+  - and reviewed by pb01ka - https://github.com/pb01ka - for its correctness.
 """
 
 import argparse

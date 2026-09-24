@@ -44,6 +44,16 @@ EDITS = {
             "langchain-ibm",
             "trustcall",
             "langchain-chroma",
+            # Tracing integrations not packaged on conda-forge.
+            "langfuse",
+            "langwatch",
+            # Packaged on conda-forge but not co-installable with langflow-base
+            # there: every slowapi build constrains redis-py <4 (upstream needs
+            # >=7.4), and every traceloop-sdk build pulls in
+            # opentelemetry-instrumentation-chromadb, which needs chromadb <0.6
+            # (upstream needs >=1.0). langflow only imports both lazily.
+            "redis",
+            "traceloop-sdk",
         ],
         # Every entry for the name (including marker-split variants) is
         # collapsed into this single requirement.

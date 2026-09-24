@@ -132,6 +132,13 @@ outputs:
         - beautifulsoup4 >=4.12.3,<5.0.0
       run_constraints:
         - magika >=0.6.1,!=0.6.3,<0.7.0
+        # wcwidth 0.9.1 ships a wheel tagged cp310-abi3-linux_x86_64
+        # therefore, pip_check rejects it on non-linux-64
+        # ("not supported on this platform"). It comes in via
+        # celery -> click-repl -> prompt-toolkit.
+        - if: not linux
+          then:
+            - wcwidth !=0.9.1
     tests:
       - python:
           imports:

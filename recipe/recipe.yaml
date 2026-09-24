@@ -208,6 +208,12 @@ outputs:
         - langchain-community >=0.4.1,<1.0.0
         - ibm-watsonx-ai >=1.3.1,<2.0.0
         - langchain-ibm >=1.1.0,<1.2.0
+        - ibm-cloud-sdk-core >=3.24.4,<3.25
+        - presto-python-client >=0.8,<1
+        # Upstream gates these on python_version >= '3.11', which python_min
+        # always satisfies.
+        - ibm-watsonx-orchestrate-core >=2.12.0,<2.13
+        - ibm-watsonx-orchestrate-clients >=2.12.0,<2.13
       run_constraints:
         # ibm_db (the Db2 Vector Store client) has no upstream build for
         # linux-aarch64, and this is a noarch package built once -- a

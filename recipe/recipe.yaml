@@ -407,6 +407,7 @@ outputs:
         - python-kubernetes >=31.0.0,<33.0.0
         - aiobotocore >=3.7.0,<4.0.0
       run_constraints:
+        - openinference-instrumentation >=0.1.61
         - gunicorn >=25.3.0,<27.0.0
         - langchain-mongodb >=0.11.0
         - langchain-perplexity >=1.0.0,<2.0.0

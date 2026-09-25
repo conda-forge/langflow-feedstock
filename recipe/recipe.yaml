@@ -2,14 +2,14 @@
 schema_version: 1
 
 context:
-  version: "1.12.1"
+  version: "1.12.3"
   sdk_version: "0.4.0"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
   duckduckgo_version: "0.1.5"
   arxiv_version: "0.1.5"
-  ibm_version: "0.2.3"
-  docling_version: "0.1.6"
+  ibm_version: "0.2.5"
+  docling_version: "0.1.7"
 
 recipe:
   name: langflow-suite
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: e279436e36b6b022e830758fb25c893545a81a130a9354591b74b10a4905703f
+  sha256: d56df19d80241265fa34e1e18614a7ca5dbdd4b99cb487c44f9ea8120a27a754
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. patch_deps.py strips
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -332,7 +332,7 @@ outputs:
         - structlog >=25.4.0,<26.0.0
         - rich >=13.7.0,<14.0.0
         - langchain-experimental >=0.4.1,<0.5.0
-        - sqlmodel >=0.0.37,<0.1.0
+        - sqlmodel >=0.0.37,<0.0.45
         - pydantic >=2.13.0,<3.0.0
         - pydantic-settings >=2.2.0,<3.0.0
         - email-validator >=2.0.0

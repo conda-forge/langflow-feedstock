@@ -418,6 +418,7 @@ outputs:
         - openinference-instrumentation >=0.1.61
         - gunicorn >=25.3.0,<27.0.0
         - langchain-mongodb >=0.11.0
+        - pymongo >=4.18.2,<5.0.0
         - langchain-perplexity >=1.0.0,<2.0.0
         - langchain-qdrant >=1.0.0,<2.0.0
         - langchain-chroma >=0.2.6,<2.0.0
@@ -506,7 +507,7 @@ outputs:
         - opensearch-py ==2.8.0
         - elasticsearch >=8.19,<9.0
         - clickhouse-connect ==0.7.19
-        - pymongo >=4.10.1
+        - pymongo >=4.18.2,<5.0.0
         - aiosqlite >=0.20.0,<1.0.0
         - pgvector >=0.4.2
         - duckdb >=1.0.0,<2.0.0

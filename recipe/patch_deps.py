@@ -38,6 +38,7 @@ EDITS = {
         "remove": [
             "gunicorn",
             "langchain-mongodb",
+            "pymongo",
             "langchain-perplexity",
             "langchain-qdrant",
             "duckdb",

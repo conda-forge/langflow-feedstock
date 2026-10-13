@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "1.12.4"
+  version: "1.12.6"
   sdk_version: "0.4.0"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 1390218c57834bfb3714987d776274f12a8b0d44414b732e588ae09b677f1afb
+  sha256: bb0a6952fe4c84b07502ddd5dbeba5ecd4c486d600f76fff5d8140e6e6d85410
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. patch_deps.py strips
   # out everything that isn't needed to import and run langflow. Nobody uses all of

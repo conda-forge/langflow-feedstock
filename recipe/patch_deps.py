@@ -69,6 +69,7 @@ EDITS = {
             # noarch: python collapses upstream's per-interpreter marker split
             # and would otherwise silently drop cp314.
             "onnxruntime": "onnxruntime>=1.20",
+            "pydantic": "pydantic>=2.13.0,<3.0.0",
         },
     },
     "langflow": {
@@ -82,6 +83,14 @@ EDITS = {
         "path": "src/bundles/ibm/pyproject.toml",
         # ibm_db has no linux-aarch64 build; it is a run_constraint instead.
         "remove": ["ibm-db"],
+    },
+    "lfx": {
+        "path": "src/lfx/pyproject.toml",
+        "replace": {
+            # Upstream's <2.14 cap predates the pydantic 2.14 release (Oct 2026);
+            # matches the pydantic >=2.0.0,<3.0.0 run dep below.
+            "pydantic": "pydantic>=2.0.0,<3.0.0",
+        },
     },
 }
 

@@ -69,6 +69,7 @@ EDITS = {
             # noarch: python collapses upstream's per-interpreter marker split
             # and would otherwise silently drop cp314.
             "onnxruntime": "onnxruntime>=1.20",
+            "pydantic": "pydantic>=2.13.0,<3.0.0",
         },
     },
     "langflow": {

@@ -8,8 +8,8 @@ context:
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
   duckduckgo_version: "0.1.5"
   arxiv_version: "0.1.5"
-  ibm_version: "0.2.5"
-  docling_version: "0.1.7"
+  ibm_version: "0.2.7"
+  docling_version: "0.1.8"
 
 recipe:
   name: langflow-suite

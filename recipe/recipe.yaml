@@ -2,14 +2,14 @@
 schema_version: 1
 
 context:
-  version: "1.12.5"
+  version: "1.12.6"
   sdk_version: "0.4.0"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
   duckduckgo_version: "0.1.5"
   arxiv_version: "0.1.5"
-  ibm_version: "0.2.5"
-  docling_version: "0.1.7"
+  ibm_version: "0.2.7"
+  docling_version: "0.1.8"
 
 recipe:
   name: langflow-suite
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 938f9a58d85608f15638e93450ebd0d23525fb66c8320dc6a9d241c65f6315f6
+  sha256: bb0a6952fe4c84b07502ddd5dbeba5ecd4c486d600f76fff5d8140e6e6d85410
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. patch_deps.py strips
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -129,7 +129,7 @@ outputs:
         - markitdown >=0.1.4,<2.0.0
         - setuptools >=83.0.0,<84.0.0
         - wheel >=0.46.2,<1.0.0
-        - mcp >=1.17.0,<2.0.0
+        - mcp >=1.28.0,<2.0.0
         - psutil >=5.9.0,<8.0.0
         - beautifulsoup4 >=4.12.3,<5.0.0
       run_constraints:
@@ -389,6 +389,7 @@ outputs:
         - validators >=0.34.0,<1.0.0
         - networkx >=3.4.2,<4.0.0
         - json-repair >=0.30.3,<1.0.0
+        # See the matching mcp entry in the lfx output above.
         - mcp >=1.28.0,<2.0.0
         - a2a-sdk >=1.1.0,<2.0.0
         - ag-ui-protocol ==0.1.18

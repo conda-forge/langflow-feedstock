@@ -69,6 +69,7 @@ outputs:
     build:
       noarch: python
       script:
+        - ${{ PYTHON }} "${{ RECIPE_DIR }}/patch_deps.py" lfx
         - ${{ PYTHON }} -m pip install src/lfx -vv --no-deps --no-build-isolation
     requirements:
       host:

@@ -83,6 +83,14 @@ EDITS = {
         # ibm_db has no linux-aarch64 build; it is a run_constraint instead.
         "remove": ["ibm-db"],
     },
+    "lfx": {
+        "path": "src/lfx/pyproject.toml",
+        "replace": {
+            # Upstream's <2.14 cap predates the pydantic 2.14 release (Oct 2026);
+            # matches the pydantic >=2.0.0,<3.0.0 run dep below.
+            "pydantic": "pydantic>=2.0.0,<3.0.0",
+        },
+    },
 }
 
 ARRAY_START_RE = re.compile(r"^dependencies\s*=\s*\[\s*(#.*)?$")

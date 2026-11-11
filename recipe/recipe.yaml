@@ -2,11 +2,11 @@
 schema_version: 1
 
 context:
-  version: "1.13.1"
+  version: "1.13.2"
   sdk_version: "0.4.0"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
-  duckduckgo_version: "0.2.0"
+  duckduckgo_version: "0.2.2"
   arxiv_version: "0.2.0"
   ibm_version: "0.3.2"
   docling_version: "0.2.3"
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: a07199247c0b36eebf12c924b1a7f0b3a96803fb8d0f2406d26dea8311f58d26
+  sha256: 9b1f4a0cc8a2707e9497e887fae7f64873298791c7ce00289da92a2108ba8a13
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. patch_deps.py strips
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -429,7 +429,14 @@ outputs:
         - openinference-instrumentation-langchain >=0.1.29,<0.1.80
         - opik >=2.0.0,<3.0.0
         # Opik installs LiteLLM even without the optional litellm extra.
-        - litellm >=1.103.1,<2.0.0,!=1.107.0
+        # Capped below 1.104.0:
+        #   - conda-forge's litellm needs filelock<4.0 there, conflicting with
+        #     the filelock>=4.2.1 floor below; 1.103.x has no filelock dep.
+        #   - Upstream wants >=1.103.10, but no conda-forge build (up to 1.106.0)
+        #     actually includes it yet.
+        #   - !=1.107.0 blocks the Oct 2026 malicious release (belt-and-suspenders
+        #     with <1.104.0).
+        - litellm >=1.103.1,<1.104.0,!=1.107.0
         - openlayer >=0.9.0,<1.0.0
         - python-kubernetes >=31.0.0,<33.0.0
         - aiobotocore >=3.7.0,<4.0.0

@@ -74,6 +74,12 @@ EDITS = {
             # skipping 1.29.x/1.30.x, so upstream's >=1.30.0 can never resolve
             # there. 2.x is a breaking rewrite;
             "mcp": "mcp>=1.28.0,<2.0.0",
+            # Upstream pins >=1.103.10,<1.104.0 (fix for GHSA-w4c7-34wj-hqm8, an
+            # Enterprise-only proxy master-key leak). conda-forge has no 1.103.10
+            # build, and every build >=1.104.0 there needs filelock<4.0, which
+            # conflicts with the filelock>=4.2.1 run dep in recipe.yaml. Matches
+            # the litellm run dep below.
+            "litellm": "litellm>=1.103.1,<1.104.0,!=1.107.0",
         },
     },
     "langflow": {

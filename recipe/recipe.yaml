@@ -6,7 +6,7 @@ context:
   sdk_version: "0.4.0"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
-  duckduckgo_version: "0.2.0"
+  duckduckgo_version: "0.2.2"
   arxiv_version: "0.2.0"
   ibm_version: "0.3.2"
   docling_version: "0.2.3"

@@ -2,7 +2,7 @@
 schema_version: 1
 
 context:
-  version: "1.13.3"
+  version: "1.13.4"
   sdk_version: "0.4.0"
   # lfx-* extension bundles are versioned independently of langflow itself
   # (src/bundles/<name>/pyproject.toml), so each gets its own context pin.
@@ -17,7 +17,7 @@ recipe:
 
 source:
   url: https://github.com/langflow-ai/langflow/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: caf956175d3cc4a3167347539d3bd746ceb3d28a66de34691f6698ba59f10510
+  sha256: c963d472ee8c59d859d89c1145a5206c284ed5271f902175cc6ded5d76592d05
   # Langflow bundles a very large number of third-party integrations (IBM watsonx,
   # MongoDB, ClickHouse, etc.) as hard dependencies by default. patch_deps.py strips
   # out everything that isn't needed to import and run langflow. Nobody uses all of
@@ -124,7 +124,7 @@ outputs:
         - langchain-classic >=1.0.7,<1.1.0
         - validators >=0.34.0,<1.0.0
         - filelock >=4.2.1,<5.0.0
-        - pypdf >=6.21.2,<7.0.0
+        - pypdf >=7.0.0,<8.0.0
         - cryptography >=50.0.0
         - pyjwt >=2.15.1,<3.0.0
         - sqlalchemy >=2.0.38,<2.1.0
@@ -396,7 +396,7 @@ outputs:
         - assemblyai >=0.33.0,<1.0.0
         - fastapi-pagination >=0.13.1,<1.0.0
         - defusedxml >=0.7.1,<1.0.0
-        - pypdf >=6.21.2,<7.0.0
+        - pypdf >=7.0.0,<8.0.0
         - validators >=0.34.0,<1.0.0
         - networkx >=3.4.2,<4.0.0
         - json-repair >=0.30.3,<1.0.0
